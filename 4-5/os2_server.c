@@ -20,8 +20,7 @@ struct letter *HandleTCPClient(int clntSocket) {
   if ((header_progress = recv(clntSocket, header_caret, header_size, 0)) < 0)
     DieWithError("recv() failed");
   header_caret += header_progress;
-  while (header_progress < header_size)
-  {
+  while (header_progress < header_size) {
     int part_size;
     if ((part_size = recv(clntSocket, header_caret, header_size - header_progress, 0)) < 0)
       DieWithError("recv() failed");
@@ -37,8 +36,7 @@ struct letter *HandleTCPClient(int clntSocket) {
   int name_progress = 0;
   if ((name_progress = recv(clntSocket, letter->name, letter->nameLen, 0)) < 0)
     DieWithError("recv() failed");
-  while (name_progress < letter->nameLen)
-  {
+  while (name_progress < letter->nameLen) {
     int part_size;
     if ((part_size = recv(clntSocket, &(letter->name[name_progress]), letter->nameLen - name_progress, 0)) < 0)
       DieWithError("recv() failed");
@@ -49,13 +47,13 @@ struct letter *HandleTCPClient(int clntSocket) {
 }
 
 int main(int argc, char *argv[]) {
-  unsigned short servPort = atoi(argv[1]);// server port
-  int N = atoi(argv[2]);                  // number of awaited letters
-
   if (argc != 3) {
     fprintf(stderr, "Usage:  %s <Server Port> <N>\n", argv[0]);
     exit(1);
   }
+
+  unsigned short servPort = atoi(argv[1]);// server port
+  int N = atoi(argv[2]);                  // number of awaited letters
 
   int *clientSockets = (int *) malloc(N * sizeof(int));
   struct letter **clientLetters = (struct letter **) malloc(N * sizeof(struct letter **));

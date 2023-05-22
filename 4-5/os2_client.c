@@ -10,18 +10,17 @@
 void DieWithError(char *errorMessage);
 
 int main(int argc, char *argv[]) {
-  int sock;                               // socket descriptor
-  char *servIP = argv[1];                 // server ip (as string)
-  unsigned short servPort = atoi(argv[2]);// server port
-  char *name = argv[3];                   // name of the letter sender
-  int wealth = atoi(argv[4]);             // wealth of the letter sender
-
   if (argc != 5) {
     fprintf(stderr,
             "Usage: %s <Server IP> <Server Port> <Name> <Wealth>\n",
             argv[0]);
     exit(1);
   }
+  int sock;                               // socket descriptor
+  char *servIP = argv[1];                 // server ip (as string)
+  unsigned short servPort = atoi(argv[2]);// server port
+  char *name = argv[3];                   // name of the letter sender
+  int wealth = atoi(argv[4]);             // wealth of the letter sender
 
   int nameLen = strlen(name) + 1;
 
@@ -51,7 +50,7 @@ int main(int argc, char *argv[]) {
   if (connect(sock, (struct sockaddr *) &servAddr, sizeof(servAddr)) < 0)
     DieWithError("connect() failed");
   int sendLen = send(sock, message, messageLen, 0);
-  
+
   // send the letter
   if (sendLen != messageLen)
     DieWithError("send() sent a different number of bytes than expected");
@@ -65,8 +64,8 @@ int main(int argc, char *argv[]) {
   while (totalBytesRcvd < REPLY_SIZE) {
     if ((bytesRcvd = recv(sock, replyBuffer, REPLY_SIZE, 0)) <= 0)
       DieWithError("recv() failed or connection closed prematurely");
-    totalBytesRcvd += bytesRcvd;   
-    replyBuffer[bytesRcvd] = '\0'; 
+    totalBytesRcvd += bytesRcvd;
+    replyBuffer[bytesRcvd] = '\0';
     printf("%s", replyBuffer);
   }
   printf("\".\n");
